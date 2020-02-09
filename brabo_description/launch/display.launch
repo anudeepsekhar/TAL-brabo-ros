@@ -1,0 +1,7 @@
+<launch>
+	<arg name="brabo" />
+	<param name="robot_description" command="$(find xacro)/xacro.py $(find brabo_description)/urdf/brabo.xacro" />
+  	<param name="ignore_timestamp" value="true" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find brabo_description)/rviz/urdf.rviz" required="true" />
+</launch>
