@@ -6,7 +6,8 @@
       joint2_position_controller
       joint3_position_controller
       joint4_position_controller
-      joint5_position_controller"/>
+      joint5_position_controller
+      gripper_controller"/>
 
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
@@ -16,3 +17,4 @@
   <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find brabo_description)/rviz/urdf.rviz" required="true" /> -->
 
 </launch>
+ 
