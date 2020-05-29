@@ -1,8 +1,0 @@
-controller_list:
-  - name: fake_arm_controller
-    joints:
-      - link_1_joint
-      - link_2_joint
-      - link_3_joint
-      - link_4_joint
-      - link_5_joint

@@ -1,7 +1,0 @@
-gazebo_ros_control/pid_gains:
-  link_1_joint: {p: 100.0, i: 0.01, d: 10.0}
-  link_2_joint: {p: 500.0, i: 0.01, d: 10.0}
-  link_3_joint: {p: 500.0, i: 0.01, d: 10.0}  
-  link_4_joint: {p: 500.0, i: 0.01, d: 10.0}
-  link_5_joint: {p: 500.0, i: 0.01, d: 10.0}
-  robotiq_85_left_knuckle_joint: {p: 10.0, i: 0.01, d: 10.0}
