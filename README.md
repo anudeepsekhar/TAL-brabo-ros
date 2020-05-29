@@ -20,3 +20,6 @@ Check if the controllers are correctly installed
  sudo apt-get install ros-kinetic-velocity-controllers
  sudo apt-get install ros-kinetic-position-controllers
 `
+
+### To launch moveit simulation 
+`roslaunch brabo_description brabo_bringup_moveit.launch `
