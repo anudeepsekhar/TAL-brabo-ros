@@ -1,0 +1,8 @@
+<launch>
+	<rosparam file="$(find brabo_description)/config/trajectory_control.yaml" command="load"/>
+
+  <node name="brabo_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/brabo" args="brabo_arm_joint_controller
+                                      gripper_controller"/>
+
+</launch>

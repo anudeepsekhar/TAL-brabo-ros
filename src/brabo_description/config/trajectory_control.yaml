@@ -1,0 +1,27 @@
+brabo:
+# Trajectory Controller
+  brabo_arm_joint_controller:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - link_1_joint
+      - link_2_joint
+      - link_3_joint
+      - link_4_joint
+      - link_5_joint
+
+    gains:
+      link_1_joint:   {p: 500.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      link_2_joint: {p: 500.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      link_3_joint:  {p: 500.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      link_4_joint:       {p: 500.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      link_5_joint:    {p: 500.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+
+  # Gripper controller
+  gripper_controller:
+    type: position_controllers/GripperActionController
+    joint: robotiq_85_left_knuckle_joint
+    action_monitor_rate: 20
+    goal_tolerance: 0.002
+    max_effort: 100
+    stall_velocity_threshold: 0.001
+    stall_timeout: 1.0

@@ -1,0 +1,13 @@
+controller_list:
+  - name: brabo/brabo_arm_joint_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints: 
+      - link_1_joint
+      - link_2_joint
+      - link_3_joint
+      - link_4_joint
+      - link_5_joint
+      - robotiq_85_left_knuckle_joint
+

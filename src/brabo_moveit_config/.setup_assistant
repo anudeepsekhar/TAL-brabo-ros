@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: brabo_description
+    relative_path: urdf/brabo_gripper_camera.xacro
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/brabo.srdf
+  CONFIG:
+    author_name: anudeep
+    author_email: anudeep@home.pc
+    generated_timestamp: 1590743068

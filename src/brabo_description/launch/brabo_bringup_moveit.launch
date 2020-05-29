@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+  <!-- Launch Gazebo  -->
+  <include file="$(find brabo_description)/launch/gazebo_gripper_camera.launch" />
+
+  <!-- ros_control seven dof arm launch file -->
+  <include file="$(find brabo_description)/launch/brabo_gazebo_states.launch" />
+
+  <!-- ros_control trajectory control dof arm launch file -->
+  <include file="$(find brabo_description)/launch/trajectory_controller.launch" /> 
+
+  <include file="$(find brabo_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="publish_monitored_planning_scene" value="true" />
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <include file="$(find brabo_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+
+	<!-- publish joint states -->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="/use_gui" value="false"/>
+		<rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
+	</node>
+
+</launch>

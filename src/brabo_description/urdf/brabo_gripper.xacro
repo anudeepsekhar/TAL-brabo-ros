@@ -1,0 +1,399 @@
+<?xml version="1.0"?>
+
+
+<robot name="brabo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Include materials -->
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+  <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
+
+  <!-- Constants -->
+  <xacro:property name="M_SCALE" value="0.001 0.001 0.001"/> 
+  <xacro:property name="M_PI" value="3.14159"/>
+
+
+   <xacro:macro name="inertial_matrix" params="mass">
+      <inertial>
+      	<mass value="${mass}" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+      </inertial>
+   </xacro:macro>
+
+   <xacro:macro name="transmission_block" params="joint_name">
+	  <transmission name="tran1_${joint_name}">
+	    <type>transmission_interface/SimpleTransmission</type>
+	    <joint name="${joint_name}">
+	      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	    </joint>
+	    <actuator name="motor1_${joint_name}">
+	      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	      <mechanicalReduction>1</mechanicalReduction>
+	    </actuator>
+	  </transmission>
+   </xacro:macro>
+
+
+<!-- BOTTOM FIXED LINK 
+This link is the base of the arm in which arm is placed 
+
+-->
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="bottom_link"/>
+    <child link="base_link"/>
+  </joint>
+
+  <link name="base_link">
+
+    <visual>
+      <origin xyz=" 0 0 -0.04"  rpy="0 0 0"/>
+      <geometry>
+
+	       <box size="1 1 0.02" />
+
+      </geometry>
+      <material name="Brown" />
+    </visual>
+
+    <collision>
+      <origin xyz=" 0 0 -0.04"  rpy="0 0 0"/>
+      <geometry>
+	       <box size="1 1 0.02" />
+      </geometry>
+      </collision>>
+
+  </link>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <!-- BASE LINK -->
+  <link name="bottom_link">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" /> <!-- rotate PI/2 -->
+      <geometry>
+
+	       <mesh filename="package://brabo_description/meshes/visual/base_link.dae" scale="0.001 0.001 0.001"/>   
+
+      </geometry>
+      <material name="Black" />
+	  
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 .025" rpy="0 0 0" /> <!-- rotate PI/2 -->
+      <geometry>
+
+	       <cylinder radius=".300" length=".04"/>
+		
+      </geometry>
+      </collision>>
+	<xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+  <gazebo reference="bottom_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="link_1_joint" type="revolute">
+    <parent link="bottom_link"/>
+    <child link="link_1"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-${M_PI-M_PI/18}" upper="${M_PI-M_PI/18}"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <!-- LINK 1-->
+  <link name="link_1" >
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+
+            <mesh filename="package://brabo_description/meshes/visual/Link_01.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+            <mesh filename="package://brabo_description/meshes/visual/Link_01.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+    </collision>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_1">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="link_2_joint" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="0 0 .459797" rpy="0 -${M_PI/2} 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-${135*deg_to_rad}" upper="${135*deg_to_rad}" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- LINK 2 -->
+  <link name="link_2" >
+
+    <visual>
+      <origin xyz="-0.459797 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+
+           <mesh filename="package://brabo_description/meshes/visual/Link_02.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+      <material name="White" />
+    </visual>
+
+    <collision>
+      <origin xyz="-0.459797 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+           <mesh filename="package://brabo_description/meshes/visual/Link_02.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+    </collision>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_2">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <joint name="link_3_joint" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <origin xyz="0.374934 0 0" rpy="0 ${M_PI} 0 " />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-${135*deg_to_rad}" upper="${135*deg_to_rad}" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- ELBOW ROLL LINK -->
+  <link name="link_3" >
+
+    <visual>
+      <origin xyz="0.834731 0 0" rpy="0 -${M_PI/2} 0" />
+      <geometry>
+
+            <mesh filename="package://brabo_description/meshes/visual/Link_03.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+      <material name="Black" />
+    </visual>
+
+    <collision>
+      <origin xyz="0.834731 0 0" rpy="0 -${M_PI/2} 0" />
+      <geometry>
+            <mesh filename="package://brabo_description/meshes/visual/Link_03.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+    </collision>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_3">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <joint name="link_4_joint" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <origin xyz="-0.375066 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-${M_PI*2}" upper="${M_PI*2}" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <!-- ELBOW PITCH LINK -->
+  <link name="link_4" >
+
+    <visual>
+      <origin xyz="1.209797 0 0" rpy="0 -${M_PI/2} 0" />
+      <geometry>
+
+        <mesh filename="package://brabo_description/meshes/visual/Link_04.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+    <collision>
+      <origin xyz="1.209797 0 0" rpy="0 -${M_PI/2} 0" />
+      <geometry>
+       <mesh filename="package://brabo_description/meshes/visual/Link_04.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+    </collision>
+	<xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_4">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="link_5_joint" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <origin xyz="0 0 0" rpy="0 -${M_PI/2} 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="2.6128806087" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- WRIST ROLL LINK -->
+  <link name="link_5" >
+    <visual>
+      <origin xyz="0 0 -1.209797" rpy="0 0 0" />
+      <geometry>
+
+         <mesh filename="package://brabo_description/meshes/visual/Link_05.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+      <material name="Black" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 -1.209797" rpy="0 0 0" />
+      <geometry>
+           <mesh filename="package://brabo_description/meshes/visual/Link_05.dae" scale="0.001 0.001 0.001"/> 
+
+      </geometry>
+    </collision>
+	<xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+  <gazebo reference="link_5">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_85_gripper.urdf.xacro" />
+  
+  <!-- Robotiq Coupler -->
+  <!--  + Height added by the coupler: 8mm -->
+  <!--  + Reference frame: at the middle (4mm) -->
+  <link name="robotiq_coupler">
+    <visual>
+      <geometry>
+        <mesh filename="package://robotiq_description/meshes/robotiq_85_coupler.stl" />
+      </geometry>
+      <material name="flat_black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://robotiq_description/meshes/robotiq_85_coupler.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="2.073e-05   1.45286e-03  -1.1049e-03" rpy="0 0 0" />
+      <mass value="0.168" />
+      <inertia ixx="6.69695624e-05" ixy="5.21511788e-09" ixz="-2.74383009e-08" 
+               iyy="7.85088161e-05" iyz="5.41105193e-07" izz="1.41819717e-04"/>
+    </inertial>
+  </link>
+
+  <joint name="robotiq_coupler_joint" type="fixed">
+    <origin xyz="0 0 0.06" rpy="0 0 ${-pi/2.0}" />
+    <parent link="link_5"/>
+    <child link="robotiq_coupler"/>
+  </joint>
+  <gazebo reference="robotiq_coupler">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+  
+  <!-- Equivalent to the OpenRAVE manipulator denso_robotiq_85_gripper -->
+  <!-- <link name="denso_robotiq_85_gripper" /> -->
+  <!-- <joint name="manipulator_dummy_joint" type="fixed"> -->
+  <!--   <origin xyz="0 0 0.1441" rpy="0 0 0" /> -->
+  <!--   <parent link="robotiq_coupler"/> -->
+  <!--   <child link="denso_robotiq_85_gripper"/> -->
+  <!-- </joint> -->
+  
+  <!-- Attach the robotiq 85 gripper -->
+  <xacro:robotiq_85_gripper prefix="" parent="robotiq_coupler" >
+    <origin xyz="0 0 0.004" rpy="0 ${-pi/2} ${pi}"/>
+  </xacro:robotiq_85_gripper> 
+  
+  <!-- Gazebo grasping plugin -->
+  <gazebo>
+    <gripper name="gazebo_gripper">
+      <grasp_check>
+        <attach_steps>2</attach_steps>    <!-- default: 20 -->
+        <detach_steps>2</detach_steps>    <!-- default: 40 -->
+        <min_contact_count>3</min_contact_count>
+      </grasp_check>
+      <gripper_link>robotiq_85_left_finger_tip_link</gripper_link>
+      <gripper_link>robotiq_85_right_finger_tip_link</gripper_link>
+      <palm_link>robotiq_85_base_link</palm_link>
+    </gripper>
+  </gazebo>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Transmissions for ROS Control -->
+
+   <xacro:transmission_block joint_name="link_1_joint"/>
+   <xacro:transmission_block joint_name="link_2_joint"/>
+   <xacro:transmission_block joint_name="link_3_joint"/>
+   <xacro:transmission_block joint_name="link_4_joint"/>
+   <xacro:transmission_block joint_name="link_5_joint"/>
+
+
+
+  <!-- Define arm with gripper mounted on a base -->
+  <!-- <xacro:base name="base"/> 
+  <xacro:arm parent="base"/> 
+  <xacro:gripper parent="tool"/> -->
+
+  
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/brabo</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+<legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+</robot>
